@@ -11,72 +11,38 @@
  Target Server Version : 50723
  File Encoding         : 65001
 
- Date: 19/02/2019 15:12:07
+ Date: 25/02/2019 13:46:09
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
--- Table structure for cmt_cmt
+-- Table structure for mb_msg
 -- ----------------------------
-DROP TABLE IF EXISTS `cmt_cmt`;
-CREATE TABLE `cmt_cmt`  (
-  `id` bigint(20) NOT NULL,
-  `cmt_id` bigint(20) NOT NULL,
-  `userid` bigint(20) NOT NULL,
-  `date` datetime(0) NULL,
-  `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'content都需要带上 回复XXX 的字样。',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `cmt_id`(`cmt_id`) USING BTREE,
-  INDEX `userid`(`userid`) USING BTREE,
-  CONSTRAINT `cmt_cmt_ibfk_1` FOREIGN KEY (`cmt_id`) REFERENCES `cmt_msg` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `cmt_cmt_ibfk_2` FOREIGN KEY (`userid`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for cmt_msg
--- ----------------------------
-DROP TABLE IF EXISTS `cmt_msg`;
-CREATE TABLE `cmt_msg`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `msg_id` bigint(20) NOT NULL,
-  `userid` bigint(20) NOT NULL,
-  `date` datetime(0) NULL,
-  `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `be_commented_id`(`msg_id`) USING BTREE,
-  INDEX `userid`(`userid`) USING BTREE,
-  CONSTRAINT `cmt_msg_ibfk_1` FOREIGN KEY (`msg_id`) REFERENCES `message` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `cmt_msg_ibfk_2` FOREIGN KEY (`userid`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for message
--- ----------------------------
-DROP TABLE IF EXISTS `message`;
-CREATE TABLE `message`  (
+DROP TABLE IF EXISTS `mb_msg`;
+CREATE TABLE `mb_msg`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `userid` bigint(20) NOT NULL,
   `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `date` datetime(0) NULL DEFAULT NULL,
-  `like` int(10) NULL DEFAULT NULL,
-  `pic` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'UUID',
+  `pic` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'URL+默认图片',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `userid`(`userid`) USING BTREE,
-  CONSTRAINT `message_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `mb_msg_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `mb_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Table structure for user
+-- Table structure for mb_user
 -- ----------------------------
-DROP TABLE IF EXISTS `user`;
-CREATE TABLE `user`  (
+DROP TABLE IF EXISTS `mb_user`;
+CREATE TABLE `mb_user`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `login_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `login_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '登录名+不能重复，注册的时候要校验',
+  `username` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '昵称 数据安全',
   `password` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '需要加密',
   `desc` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `profile_pic` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'UUID 一共是32位',
+  `profile_pic` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'url',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
