@@ -1,0 +1,33 @@
+server:
+  port: 8000
+  servlet:
+    context-path: /board
+
+#开发配置    
+spring:
+  application:
+    name: board
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  datasource:
+    url: jdbc:mysql://localhost:3306/msgboard?useSSL=false&createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT
+    username: root
+    password: bigbang.
+    driverClassName: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    name: druid
+    
+logging:
+  file: logs/Board.log
+  level:
+    root: info
+    org.apache.ibatis: debug
+    java.sql.Connection: debug
+    java.sql.Statement: debug
+    java.sql.PreparedStatement: debug
+    com.alibaba.druid.sql: debug
+    com.alibaba.druid.proxy.jdbc: info
+    druid.sql: info
+    cn.cs.Board: debug   
+ 

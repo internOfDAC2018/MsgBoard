@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Built-By: al89
+Build-Jdk: 10.0.1
+Implementation-Title: demo
+Implementation-Version: 0.0.1-SNAPSHOT
+Implementation-Vendor-Id: cn.cs
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/Board
+Created-By: Maven Integration for Eclipse
+

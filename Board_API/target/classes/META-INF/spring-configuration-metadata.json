@@ -1,0 +1,12 @@
+{
+  "groups": [
+    {
+      "name": "spring.datasource.druid",
+      "type": "javax.sql.DataSource",
+      "sourceType": "cn.cs.Board.Config.DruidConfig",
+      "sourceMethod": "public javax.sql.DataSource druidDataSource() "
+    }
+  ],
+  "properties": [],
+  "hints": []
+}
