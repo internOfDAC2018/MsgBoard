@@ -1,0 +1,6 @@
+platform :ios, '8.0'
+use_frameworks!
+xcodeproj '/Users/wangkexu00/Desktop/LoginTest/LoginTest.xcodeproj'
+target '/Users/wangkexu00/Desktop/LoginTest/LoginTest' do 
+pod 'SwiftyJSON', '~> 2.3.1'
+end

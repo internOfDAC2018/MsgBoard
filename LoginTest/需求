@@ -1,0 +1,55 @@
+Login画面：进程结束之后重新登录免密登陆     7  TODO
+detail画面：优化布局，控件，icon          5  TODO
+           设置指示器，进度条            4  HALF
+Mesboard画面：排版                      6  COMPLETE
+             缩略图 点击进入             3  COMPLETE
+             指示器，进度条              4  HALF
+selfIntroduce 画面：修改头像             2   COMPLETE
+Login-Mesboard-Detail                 1   COMPLETE
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+//
+//override func viewWillAppear(_ animated: Bool) {
+//
+//}
+//
+//override func viewDidAppear(_ animated: Bool) {
+//
+//}
+//
+//override func viewWillDisappear(_ animated: Bool) {
+//
+//}
+//
+//override func viewDidDisappear(_ animated: Bool) {
+//
+//}
+
+
+
+
+
+
+
+
+
+
+
+//    // 监听网页加载进度
+//    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+//
+//        self.progressView.progress = Float(self.wkWebView.estimatedProgress)
+//    }
+
