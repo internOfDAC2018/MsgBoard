@@ -2,13 +2,16 @@ package cn.cs.Board.Controller;
 
 import javax.servlet.http.HttpSession;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-
+import java.io.OutputStream;
 import java.nio.file.OpenOption;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.ResourceUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,6 +31,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import cn.cs.Board.dao.model.User;
 import cn.cs.Board.service.IUserService;
+import net.coobird.thumbnailator.Thumbnails;
 
 
 @RestController
@@ -35,8 +40,10 @@ public class UserController {
 	@Autowired
     private IUserService userService;
 	private static final Logger logger=LoggerFactory.getLogger(UserController.class);
+	private static final HttpSession ServletActionContext = null;
+
 	
-	@Value("${cn.cs.Board.updatePath}")
+	@Value("${cn.cs.Board.uploadPath}")
 	private String uploadPath;
 
 
@@ -107,7 +114,7 @@ public class UserController {
 		if(u!=null )
 		{
 			if(u.getId()==record.getId()) {
-				logger.info("new info of user is "+record.toString());
+				logger.info("update new info of user  ");
 				boolean result=this.userService.update(record);
 				if(result){
 					 o.put("flag","1");
@@ -153,18 +160,33 @@ public class UserController {
 				//lastIndexOf指的是最后一个。出现的下index
 				//substring(int index),从这个index(从0开始)。unhappy substring(2)=happy
 				String name=uuid+suffixName;
-				logger.info("will be stored as name : "+name);
-												
-				logger.info("will be stored in : "+uploadPath);								
-				file.transferTo(new File(uploadPath+"\\"+name));
+				logger.info("will be stored as name : "+name);												
+				
+				File row=new File(uploadPath+"\\"+name);
+				File SLT=new File(uploadPath+"\\"+uuid+"_SLT"+suffixName);
+				
+				logger.info("will be stored in : "+uploadPath);	
+				file.transferTo(row);
+				logger.info("_SLT will be stored in : "+uploadPath+"\\"+uuid+"_SLT"+suffixName);
+				//缩略图
+				if(file.getSize()>1000000l && file.getSize()<10000000l) {					
+					Thumbnails.of(row).scale(0.3).toFile(SLT);
+				}
+				else if(file.getSize()>10000000l && file.getSize()<100000000l){
+					Thumbnails.of(row).scale(0.03).toFile(SLT);
+				}
+				else {
+					Thumbnails.of(row).scale(1).toFile(SLT);
+				}
 				
 				JSONObject o =new JSONObject();
 				o.put("flag", "success");
-				o.put("pic",name);
+				o.put("pic",uuid+"_SLT"+suffixName);
 				logger.info("file upload complete");
 				return o;
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
+				logger.info("error");
 				e.printStackTrace();
 			}
 		}
@@ -174,4 +196,51 @@ public class UserController {
 		return o;
 	}
 	
+	@RequestMapping(value= {"/images/{imageName}"},method = {RequestMethod.GET})
+	public void getImage(@PathVariable String imageName,HttpServletResponse response) {
+		logger.info("request "+imageName);
+		if(imageName!=null)
+		{
+			File file = new File(uploadPath, imageName);
+			if(file.exists())
+			{
+				response.setHeader("content-type", "application/octet-stream");
+                response.setContentType("application/octet-stream");
+                byte[] buffer = new byte[1024];
+                FileInputStream fis = null;
+                BufferedInputStream bis = null;
+                try {
+                    fis = new FileInputStream(file);
+                    bis = new BufferedInputStream(fis);
+                    OutputStream os = response.getOutputStream();
+                    int i = bis.read(buffer);
+                    while (i != -1) {
+                        os.write(buffer, 0, i);
+                        i = bis.read(buffer);
+                    }
+                   logger.info("下载成功");
+                   
+                   }catch (Exception e) {
+                       e.printStackTrace();
+                   } finally {
+                       if (bis != null) {
+                           try {
+                               bis.close();
+                           } catch (IOException e) {
+                               e.printStackTrace();
+                           }
+                       }
+                       if (fis != null) {
+                           try {
+                               fis.close();
+                           } catch (IOException e) {
+                               e.printStackTrace();
+                           }
+                       }
+                   }
+                }
+			logger.info("finished");
+		}		
+	}
+		
 }

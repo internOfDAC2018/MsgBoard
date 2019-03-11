@@ -112,23 +112,28 @@ public class UserService implements IUserService {
     	Criteria criteria=fe.createCriteria();
     	criteria.andIdEqualTo(record.getId());
     	User u=new User();
-    	if(record.getDescription()!=null)
+    	if(record.getDescription()!=null && record.getDescription()!="")
     	{
     		u.setDescription(record.getDescription());
+    		logger.info("to be written into DB is"+" description "+u.getDescription());
     	}
-    	if(record.getPassword()!=null)
+    	if(record.getPassword()!=null && record.getPassword()!="")
     	{
     		u.setPassword(record.getPassword());
+    		logger.info("to be written into DB is"+" getPassword "+u.getPassword());
     	}
-    	if(record.getProfilePic()!=null)
+    	if(record.getProfilePic()!=null && record.getProfilePic()!="")
     	{
     		u.setProfilePic(record.getProfilePic());
+    		
+    		logger.info("to be written into DB is"+" getProfilePic "+u.getProfilePic());
     	}
-    	if(record.getUsername()!=null)
+    	if(record.getUsername()!=null && record.getUsername()!="")
     	{
     		u.setUsername(record.getUsername());
+    		logger.info("to be written into DB is"+" getUsername "+u.getUsername());
     	}
-    	logger.info("to be written into DB is"+u.toString());
+    	
 		int result=userMapper.updateByExampleSelective(u,fe);
 		if(result==1)
 		{
